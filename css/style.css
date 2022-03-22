@@ -191,3 +191,7 @@
     text-transform: capitalize;
     opacity: 0.5;
   }
+
+  div#example_filter, div#example_paginate {
+    float: right;
+  }

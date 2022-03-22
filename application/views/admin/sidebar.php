@@ -5,12 +5,12 @@
     <hr>
     <ul class="nav nav-pills flex-column mb-auto">
       <li>
-        <a href="#" class="nav-link text-white">
-          Dashboard
+      <a href="<?php echo base_url('admin/dashboard');?>"  class="nav-link text-white">
+      Dashboard
         </a>
       </li>
       <li>
-        <a href="#" class="nav-link text-white">
+      <a href="<?php echo base_url('admin/products');?>"  class="nav-link text-white">
           Products
         </a>
       </li>
