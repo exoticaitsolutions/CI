@@ -8,6 +8,7 @@ class User extends CI_Controller {
         $this->load->helper('url');
         $this->load->model('user_model');
         $this->load->model('product_model');
+        $this->load->model('attachproduct_model');
         $this->load->library('session');
     }
     
@@ -99,7 +100,12 @@ class User extends CI_Controller {
     function admin_dashboard(){
         if($this->session->userdata()){
             $data['active_product']=$this->product_model->active_product();
+            $data['active_user_with_product']=$this->attachproduct_model->active_user_attach_product();
             $data['active_user']=$this->user_model->active_user();
+            $data['active_product_without_attach']=$this->attachproduct_model->active_product_without_attach();
+            $data['active_product_amount']=$this->attachproduct_model->active_product_amount();
+            $data['attach_product_list']=$this->attachproduct_model->attach_product_list();
+            $data['attach_list']=$this->attachproduct_model->attach_list();
             $this->load->view("admin/header.php");
             $this->load->view("admin/sidebar.php");
             $this->load->view('admin/dashboard.php', $data);
@@ -127,7 +133,6 @@ class User extends CI_Controller {
     }
 
     public function user_logout(){
-    
       $this->session->sess_destroy();
       redirect('login', 'refresh');
     }
@@ -166,5 +171,80 @@ class User extends CI_Controller {
         $this->load->view("pages/login.php");
         $this->load->view("layouts/footer.php");
     }
-    
+
+
+    public function product_list(){
+        if($this->session->userdata()){
+            $data['products'] = $this->product_model->list_active();
+            $this->load->view("layouts/header.php");
+            $this->load->view('pages/product_list.php', $data);
+            $this->load->view("layouts/footer.php");
+        }else{
+            $this->load->view("layouts/header.php");
+            $this->load->view("pages/login.php");
+            $this->load->view("layouts/footer.php");
+        }
     }
+
+    public function attach_product(){
+        try{
+            $post = $this->input->post();
+            $attach = array(
+                'user_id' => $this->session->userdata('user_id'),
+                'product_id' => $post['product_id'],
+                'price' => $post['price'],
+                'quantity' => $post['quantity'],
+                'created_at' => date('Y-m-d H:i:s'),
+				'updated_at' => date('Y-m-d H:i:s')
+            );
+            
+            $product_exist = $this->attachproduct_model->product_exist($this->session->userdata('user_id'), $post['product_id']);
+            if($product_exist){
+                $attach = array(
+                    'user_id' => $this->session->userdata('user_id'),
+                    'product_id' => $post['product_id'],
+                    'price' => $post['price'],
+                    'quantity' => $post['quantity'],
+                    'updated_at' => date('Y-m-d H:i:s')
+                );    
+                $result = $this->attachproduct_model->update_product($attach);
+            }else{
+                $result = $this->attachproduct_model->add_product($attach);
+            }
+            if($result){
+                $res = array('status' => true, 'message' => 'Your information saved successfully.');
+            }else{
+                $res = array('status' => false, 'message' => 'Something went wrong.');
+            }
+        }catch(Exception $e){
+            $res = array('status' =>  false, 'message' => $e->getMessage());
+        }
+        header('Content-type: application/json');
+        echo json_encode($res);
+    }
+
+    public function attach_product_list(){
+        if($this->session->userdata()){
+            $data['products'] = $this->attachproduct_model->list($this->session->userdata('user_id'));
+            $this->load->view("layouts/header.php");
+            $this->load->view('pages/attach_product.php', $data);
+            $this->load->view("layouts/footer.php");
+        }else{
+            $this->load->view("layouts/header.php");
+            $this->load->view("pages/login.php");
+            $this->load->view("layouts/footer.php");
+        }
+    }
+
+    public function delete_attach($id){
+        try{
+            $this->attachproduct_model->delete_product($id); 
+            $this->session->set_flashdata('success_msg', 'Attachment removed successfully.');
+            redirect('attach_product_list', 'refresh');
+        }catch(Execption $e){
+            $this->session->set_flashdata('error_msg', 'Something went wrong.');
+            redirect('attach_product_list', 'refresh');
+        }
+    }
+    
+}

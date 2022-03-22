@@ -59,6 +59,22 @@ $route['register'] = 'user/register_view';
 $route['user/login_user'] = 'user/login_user';
 $route['user/login_view'] = 'user/login_view';
 $route['user/user_profile'] = 'user/user_profile';
+$route['product']['GET'] = 'user/product_list';
+$route['attach_product']['POST'] = 'user/attach_product';
+$route['attach_product_list']['GET'] = 'user/attach_product_list';
+$route['attach_product/delete/(:any)']['GET'] = 'user/delete_attach/$1';
+
+//Admin
 $route['admin/dashboard'] = 'user/admin_dashboard';
+
+// admin product
+$route['admin/products'] = 'product';
+$route['admin/product/add'] = 'product/add';
+$route['admin/product/store']['POST'] = 'product/store';
+$route['admin/product/edit/(:any)']['GET'] = 'product/edit/$1';
+$route['admin/product/update/(:any)']['POST'] = 'product/update/$1';
+$route['admin/product/delete/(:any)']['GET'] = 'product/delete/$1';
+
+
 
 
