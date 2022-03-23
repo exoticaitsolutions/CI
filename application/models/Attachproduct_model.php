@@ -84,18 +84,12 @@ class Attachproduct_model extends CI_model{
 
 
   public function attach_product_list(){
-    $this->db->select('ap.price, ap.quantity, p.title, p.id');
-    $this->db->from('attach_products ap'); 
-    $this->db->join('products p', 'p.id=ap.product_id');
-   
-    if($query=$this->db->get())
-    {
-      $result = array();
-      foreach ($query->result_array() as $element) {
-          $result[$element['id']][] = $element;
-      }
 
-      return $result;
+    $sql = "SELECT `ap`.`price`, `ap`.`quantity`, sum(ap.quantity * ap.price) as 'Total', p.title, `u`.`id` FROM  `attach_products` `ap` JOIN `products` `p` ON `p`.`id`=`ap`.`product_id` JOIN `user` `u` ON `u`.`id`=`ap`.`user_id` GROUP BY ap.product_id";
+    $query = $this->db->query($sql);
+    if($query)
+    {
+      return $query->result_array();
     }
     else{
       return false;
@@ -103,17 +97,11 @@ class Attachproduct_model extends CI_model{
   }
 
   public function attach_list(){
-    $this->db->select('ap.price, ap.quantity, u.name, u.id');
-    $this->db->from('attach_products ap'); 
-    $this->db->join('products p', 'p.id=ap.product_id');
-    $this->db->join('user u', 'u.id=ap.user_id');
-   
-    if($query=$this->db->get())
+    $sql = "SELECT `ap`.`price`, `ap`.`quantity`, sum(ap.quantity * ap.price) as 'Total', u.name, `u`.`id` FROM  `attach_products` `ap` JOIN `products` `p` ON `p`.`id`=`ap`.`product_id` JOIN `user` `u` ON `u`.`id`=`ap`.`user_id` GROUP BY ap.user_id";
+    $query = $this->db->query($sql);
+    if($query)
     {
-      $result = array();
-      foreach ($query->result_array() as $element) {
-          $result[$element['id']][] = $element;
-      }
+      $result = $query->result_array();
       return $result;
     }
     else{

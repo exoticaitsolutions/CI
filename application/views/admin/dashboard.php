@@ -53,17 +53,14 @@
           </thead>
           <tbody>
         <?php
+     
           foreach($attach_product_list as $key => $list){
             $price = 0;
             $name = '';
-              foreach($list as $item){
-                $price += ($item['quantity']*$item['price']);
-                $name = $item['title'];
-              }
-              echo '<th>'.$key.'</th>';
-              echo '<th>'.$name.'</th>';
-              echo '<th>$'.$price.'</th>';
-              echo '</tr>';
+            echo '<th>'.$key.'</th>';
+            echo '<th>'.$list['title'].'</th>';
+            echo '<th>$'.$list['Total'].'</th>';
+            echo '</tr>';
 
           }
         ?>
@@ -89,16 +86,11 @@
           </thead>
           <tbody>
         <?php
+ 
           foreach($attach_list as $key => $list){
-            $price = 0;
-            $name = '';
-              foreach($list as $item){
-                $price += ($item['quantity']*$item['price']);
-                $name = $item['name'];
-              }
               echo '<th>'.$key.'</th>';
-              echo '<th>'.$name.'</th>';
-              echo '<th>$'.$price.'</th>';
+              echo '<th>'.$list['name'].'</th>';
+              echo '<th>$'.$list['Total'].'</th>';
               echo '</tr>';
 
           }
