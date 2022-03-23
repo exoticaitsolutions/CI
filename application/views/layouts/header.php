@@ -7,6 +7,7 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"  media="screen" title="no title">
   </head>
   <header>
+    <?php         if($this->session->userdata('user_id')){ ?>
   <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav">
@@ -25,5 +26,6 @@
     </ul>
   </div>
 </nav>
+<?php } ?>
 </header>
   <body>

@@ -13,7 +13,7 @@ class Product extends CI_Controller {
     
     public function index()
     {
-        if($this->session->userdata()){
+        if($this->session->userdata('user_id')){
             $data['product']=$this->product_model->list();
             $this->load->view("admin/header.php");
             $this->load->view("admin/sidebar.php");
