@@ -98,7 +98,7 @@ class User extends CI_Controller {
     }
 
     function admin_dashboard(){
-        if($this->session->userdata()){
+        if($this->session->userdata('user_id')){
             $data['active_product']=$this->product_model->active_product();
             $data['active_user_with_product']=$this->attachproduct_model->active_user_attach_product();
             $data['active_user']=$this->user_model->active_user();
@@ -118,8 +118,7 @@ class User extends CI_Controller {
     }
     
     function user_profile(){
-    
-        if($this->session->userdata()){
+        if($this->session->userdata('user_id')){
             $data['users'] = $this->session->userdata();
             $this->load->view("layouts/header.php");
             $this->load->view('pages/user_profile.php',$data);
@@ -174,7 +173,7 @@ class User extends CI_Controller {
 
 
     public function product_list(){
-        if($this->session->userdata()){
+        if($this->session->userdata('user_id')){
             $data['products'] = $this->product_model->list_active();
             $this->load->view("layouts/header.php");
             $this->load->view('pages/product_list.php', $data);
@@ -224,7 +223,7 @@ class User extends CI_Controller {
     }
 
     public function attach_product_list(){
-        if($this->session->userdata()){
+        if($this->session->userdata('user_id')){
             $data['products'] = $this->attachproduct_model->list($this->session->userdata('user_id'));
             $this->load->view("layouts/header.php");
             $this->load->view('pages/attach_product.php', $data);
